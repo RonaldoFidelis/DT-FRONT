@@ -13,8 +13,10 @@ export async function loginApi({ email, password }) {
   if (!res.ok) {
     throw new Error('Não foi possivel efeutar o login. Revise suas credenciais.');
   }
-
-  return res.json();
+  const data = await res.json();
+  sessionStorage.setItem('auth-token', data.token);
+  sessionStorage.setItem('name', data.name);
+  return data;
 }
 
 export const registeApi = async ({ name, email, password }) => {
