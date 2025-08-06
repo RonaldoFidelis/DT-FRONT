@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useEmailValidation from "../hook/useEmailValidation";
 import PopUpMessage from "../components/PopupMessage";
 import { useLogin } from "../hook/useFetch";
@@ -10,6 +10,7 @@ const Login = () => {
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState('');
   const validateEmail = useEmailValidation();
+  const navigate = useNavigate();
 
   const showMessage = (msg, type = 'success') => {
     setMessage(msg);
@@ -33,6 +34,7 @@ const Login = () => {
         showMessage('Login realizado com sucesso', 'success');
         setEmail('');
         setPassword('');
+        navigate('/dashboard');
       },
       onError:(error) => {
         showMessage(error.message || 'Erro ao tentar logar', 'error');

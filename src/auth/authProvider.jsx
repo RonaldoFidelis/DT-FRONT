@@ -3,15 +3,16 @@ import { createContext, useState } from 'react';
 
 export const AuthContext = createContext();
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 export function AuthProvider({ children }) {
-  const apiUrl = "http://localhost:8080/auth";
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
   const login = async(email, password) => {
 
     try {
-      const response = await axios.post(apiUrl + "/login", {
+      const response = await axios.post(BASE_URL + "login", {
         email,
         password
       });
