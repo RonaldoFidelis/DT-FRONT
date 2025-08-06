@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import PopupMessage from "../components/PopupMessage";
 import useEmailValidation from "../hook/useEmailValidation";
+import { useRegister } from "../hook/useFetch";
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -18,37 +19,31 @@ const Register = () => {
     setTimeout(() => setMessage(null), 4000);
   };
 
+  const { mutate, isLoading } = useRegister();
+
   const handleRegister = async (e) => {
     e.preventDefault();
-    const url = 'http://localhost:8080/auth/register';
-
+    
     if (!validateEmail(email)) {
       showMessage('E-mail inválido.', 'error');
       return;
     }
 
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Erro ao registrar.');
-      }
-
-      const data = await res.json();
-      console.log(data);
-      showMessage('Cadastro realizado com sucesso! Você será redirecionado em breve.', 'success');
-      setName('');
-      setEmail('');
-      setPassword('');
-      setTimeout(() => navigate('/'), 2000);
-    } catch (error) {
-      showMessage(error.message || 'Erro ao registrar.', 'error');
-    }
+    mutate(
+      { name, email, password },
+      {
+        onSuccess: () => {
+          showMessage('Usuário cadastrado com sucesso! Redirecionando para tela de login...', 'success');
+          setName('');
+          setEmail('');
+          setPassword('');
+          setTimeout(() => navigate('/'), 3000);
+        },
+        onError: (error) => {
+          showMessage(error.message || 'Erro ao cadastrar usuario', 'error');
+          console.error('Error => ', error.message);
+        }
+      })
   };
 
   return (
@@ -70,6 +65,7 @@ const Register = () => {
         <form onSubmit={handleRegister} className="flex flex-col gap-10 items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <input
+              disabled={isLoading}
               onChange={(e) => setName(e.target.value)}
               value={name}
               className="w-[350px] bg-background border-2 border-backgroundBlue h-[55px] rounded-[10px] p-4 outline-none font-extralight"
@@ -77,6 +73,7 @@ const Register = () => {
               type="text" required
             />
             <input
+              disabled={isLoading}
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               className="w-[350px] bg-background border-2 border-backgroundBlue h-[55px] rounded-[10px] p-4 outline-none font-extralight"
@@ -84,6 +81,7 @@ const Register = () => {
               type="email" required
             />
             <input
+              disabled={isLoading}
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               className="w-[350px] bg-background border-2 border-backgroundBlue h-[55px] rounded-[10px] p-4 outline-none font-extralight"
@@ -91,7 +89,10 @@ const Register = () => {
               type="password" required
             />
           </div>
-          <button type="submit" className="bg-backgroundBlue text-background font-light rounded-[5px] w-[350px] h-[50px] py-3 transition ease-in-out hover:bg-opacity-80 duration-500 text-center cursor-pointer">
+          <button
+            disabled={isLoading}
+            type="submit"
+            className="bg-backgroundBlue text-background font-light rounded-[5px] w-[350px] h-[50px] py-3 transition ease-in-out hover:bg-opacity-80 duration-500 text-center cursor-pointer">
             Cadastrar
           </button>
         </form>
