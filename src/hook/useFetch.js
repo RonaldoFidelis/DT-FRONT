@@ -20,3 +20,9 @@ export const useRecoverPassword = () => {
     retryDelay: () => 5000,
   })
 }
+
+export const useRetryEmail = () => {
+  return useMutation({
+    mutationFn: ({ email }) => recoverPasswordApi({ email }),
+  });
+};
