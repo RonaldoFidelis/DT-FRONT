@@ -8,6 +8,7 @@ const RecoverPassword = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState('');
+  const [submit, setSubmit] = useState(false)
   const validateEmail = useEmailValidation();
 
   const showMessage = (msg, type = 'success') => {
@@ -16,28 +17,34 @@ const RecoverPassword = () => {
     setTimeout(() => setMessage(null), 5000);
   };
 
-  const { mutate, isLoading } = useRecoverPassword();
-  console.log('isLoading:', isLoading);
+  const { mutate } = useRecoverPassword();
+
   const handleRecoverPassword = async (e) => {
     e.preventDefault();
+    setSubmit(true);
 
     if (!validateEmail(email)) {
       showMessage('E-mail inválido.', 'error');
+      setSubmit(false);
       return;
     }
 
     mutate(
-      { email }, {
-      onSuccess: (data) => {
-        showMessage(data, 'success');
-        setEmail('');
-      },
-      onError: (error) => {
-        showMessage(error.message || 'Uusário não identificado', 'error');
+      { email },
+      {
+        onSuccess: (data) => {
+          showMessage(data, 'success');
+          setEmail('');
+          setSubmit(false);
+        },
+        onError: (error) => {
+          showMessage(error.message || 'Usuário não identificado', 'error');
+          setSubmit(false);
+        },
       }
-    })
+    );
+  };
 
-  }
 
   return (
     <div className="flex bg-background">
@@ -54,19 +61,26 @@ const RecoverPassword = () => {
         </div>
         <form onSubmit={handleRecoverPassword} className="flex flex-col gap-10 items-center justify-center">
           <div className="flex flex-col items-center">
-            <input className="w-[350px] bg-background border-2 border-backgroundBlue h-[55px] rounded-[10px] p-4 outline-none font-extralight"
+            <input
               placeholder="Digite seu E-mail"
               type="email" required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
+              disabled={submit}
+              className={`w-[350px] border-2 h-[55px] rounded-[10px] p-4 outline-none transition-colors duration-500 ease-in-out  ${submit
+                ? 'border-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-background font-extralight border-backgroundBlue'
+                }`}
             />
           </div>
           <button
-            disabled={isLoading}
+            disabled={submit}
             type="submit"
-            className="bg-backgroundBlue text-background font-light rounded-[5px] w-[350px] h-[50px] py-3 transition ease-in-out hover:bg-opacity-80 duration-500 text-center cursor-pointer">
-            Enviar link de recuperação
+            className={`w-[350px] h-[50px] py-3 rounded-[5px] text-background font-light transition ease-in-out duration-500 text-center  ${submit
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-backgroundBlue cursor-pointer'
+              }`}>
+            {submit ? 'Aguarde...' : 'Enviar link de recuperação'}
           </button>
         </form>
       </div>
