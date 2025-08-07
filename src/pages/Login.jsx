@@ -46,7 +46,6 @@ const Login = () => {
   return (
     <div className="flex bg-background">
       <PopUpMessage message={message} type={messageType} />
-
       <div className="w-screen h-screen flex flex-col items-center justify-center">
         <div className=" flex flex-col items-center gap-1 mb-14">
           <h1 className="text-font text-2xl font-light">LOGIN</h1>
