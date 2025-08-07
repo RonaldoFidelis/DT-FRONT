@@ -1,6 +1,8 @@
-# Teste Técnico: Sistema de Notificações por E-mail com Fallback
+# Teste Técnico: Sistema de Notificações por E-mail com Fallback (Front-end)
 
 Este é o front-end de um sistema de recuperação de senha com envio de e-mail, desenvolvido com **React.js**. O sistema permite o registro, login, recuperação de senha e visualização de logs de envio de e-mail. O back-end da aplicação foi desenvolvido em **Spring Boot**.
+
+Acessar repositorio [Back-end](https://github.com/RonaldoFidelis/DT-BACK)
 
 ---
 
