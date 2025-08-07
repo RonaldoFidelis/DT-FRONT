@@ -19,6 +19,7 @@ Acessar repositorio [Back-end](https://github.com/RonaldoFidelis/DT-BACK)
 ## 🧱 Tecnologias utilizadas
 
 - React
+- Node JS
 - React Router DOM
 - TailwindCSS / CSS Modules
 - Fetch API
