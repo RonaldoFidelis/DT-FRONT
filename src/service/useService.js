@@ -59,3 +59,18 @@ export const recoverPasswordApi = async ({ email }) => {
   return responseText;
 };
 
+export const logApi = async () => {
+  const token = sessionStorage.getItem('auth-token')
+  const res = await fetch(`${BASE_URL}log`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error('Erro na requisição');
+  }
+
+  return res.json();
+}
