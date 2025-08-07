@@ -15,7 +15,8 @@ export async function loginApi({ email, password }) {
   }
   const data = await res.json();
   sessionStorage.setItem('auth-token', data.token);
-  sessionStorage.setItem('name', data.name);
+  sessionStorage.setItem('user-name', data.name);
+  sessionStorage.setItem('email', data.email);
   return data;
 }
 
